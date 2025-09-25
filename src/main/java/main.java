@@ -1,0 +1,150 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class main {
+    public static void main(String[] args) {
+        Scanner ler = new Scanner(System.in);
+        Agenda agenda = new Agenda();
+
+        int op=0;
+        String nomeContato;
+        String telContato;
+        String email;
+        ArrayList<Contato> result;
+
+        boolean exit = false;
+        do {
+            System.out.print("1-Criar contatos\n2-Ler todos contatos\n3-Buscar contato\n4-Apagar contato\n5-Sair e Salvar\nEscolha uma opção: ");
+
+            op = ler.nextInt();
+            ler.nextLine();
+            switch (op) {
+                case 1:
+                    Contato contato = new Contato();
+                    System.out.print("Digite o nome do contato: ");
+                    nomeContato = ler.nextLine();
+                    contato.setNome(nomeContato);
+
+                    System.out.print("Digite o telefone do contato: ");
+                    telContato = ler.nextLine();
+                    contato.setTelefone(telContato);
+
+                    System.out.print("Digite o email do contato: ");
+                    email = ler.nextLine();
+                    contato.setEmail(email);
+
+                    agenda.adicionarContato(contato);
+
+                    break;
+                case 2:
+                    System.out.println("Segue a lista de contatos:");
+                    System.out.println("----------------------------------------------------");
+
+                    ArrayList<Contato> allContacts = agenda.allContacts();
+                    if (allContacts.isEmpty()) {
+                        System.out.println("Nenhum contato encontrado!");
+                    } else {
+                        for(Contato c: allContacts){
+                            System.out.print(c.getId() + " ~ ");
+                            System.out.print(c.getNome() + " ~ ");
+                            System.out.print(c.getTelefone() + " ~ ");
+                            System.out.print(c.getEmail() + "\n");
+                        }
+                    }
+
+                    System.out.println("----------------------------------------------------");
+                    break;
+                case 3:
+                    System.out.print("Digite o nome, numero ou email do contato: ");
+                    nomeContato = ler.nextLine();
+                    System.out.println("\nContatos encontrados: ");
+                    System.out.println("----------------------------------------------------");
+
+                    result = agenda.lerContato(nomeContato);
+                    if(result.isEmpty()){
+                        System.out.println("Nenhum contato encontrado!");
+                    }else{
+                        for(Contato c: result){
+                            System.out.print(c.getId() + " ~ ");
+                            System.out.print(c.getNome() + " ~ ");
+                            System.out.print(c.getTelefone() + " ~ ");
+                            System.out.print(c.getEmail() + "\n");
+                        }
+                    }
+
+                    System.out.println("----------------------------------------------------");
+                    break;
+                case 4:
+                    System.out.print("Digite o nome ou numero do contato: ");
+                    nomeContato = ler.nextLine();
+
+//                    if (listaPessoas.contains(pessoaParaVerificar2)) {
+//                        System.out.println("A pessoa Pedro existe na lista.");
+//                    } else {
+//                        System.out.println("A pessoa Pedro não existe na lista.");
+//                    }
+
+                    result = agenda.lerContato(nomeContato);
+                    if(result.isEmpty()){
+                        System.out.println("----------------------------------------------------");
+                        System.out.println("Nenhum contato encontrado!");
+                        System.out.println("----------------------------------------------------");
+                    }
+                    else {
+                        System.out.println("\nContatos encontrados: ");
+                        System.out.println("----------------------------------------------------");
+
+                        ArrayList<Integer> ids = new ArrayList<>();
+                        for (Contato c : result) {
+                            System.out.print(c.getId() + " ~ ");
+                            ids.add(c.getId());
+                            System.out.print(c.getNome() + " ~ ");
+                            System.out.print(c.getTelefone() + " ~ ");
+                            System.out.print(c.getEmail() + "\n");
+                        }
+                        System.out.println("----------------------------------------------------");
+
+                        while (true) {
+                            System.out.print("Digite o ID do contato que quer apagar (999 - cancela): ");
+                            int user = ler.nextInt();
+                            System.out.println();
+                            if (ids.contains(user)) {
+                                agenda.apagarContato(user);
+                                break;
+                            } else if (user == 999) {
+                                break;
+                            }
+
+                            System.out.println("ID inválido!");
+                        }
+
+                    }
+
+                    break;
+                    //TODO tem que ter uma opcao separada para salvar e outra para sair
+                case 5:
+                    agenda.save();
+                    exit = true;
+                    break;
+            }
+        }while (!exit);
+
+
+
+//
+//        while(true) {
+//            l = ler.nextLine();
+//            if (l.equals("fim")) {
+//                break;
+//            }
+//
+//            if (l.equals("bananao")) {
+//                continue;
+//            }
+//
+//            total += (l + "\n");
+//            arq.escreverArquivo(total);
+//        }
+    }
+}
