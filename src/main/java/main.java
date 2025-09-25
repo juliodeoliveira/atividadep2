@@ -14,9 +14,8 @@ public class main {
         String email;
         ArrayList<Contato> result;
 
-        boolean exit = false;
         do {
-            System.out.print("1-Criar contatos\n2-Ler todos contatos\n3-Buscar contato\n4-Apagar contato\n5-Sair e Salvar\nEscolha uma opção: ");
+            System.out.print("1-Criar contatos\n2-Ler todos contatos\n3-Buscar contato\n4-Apagar contato\n5-Salvar\n6-Sair\nEscolha uma opção: ");
 
             op = ler.nextInt();
             ler.nextLine();
@@ -57,16 +56,53 @@ public class main {
                     System.out.println("----------------------------------------------------");
                     break;
                 case 3:
+
+                    /* * Sugestao para mudar os loops de menu, exclusivamente, estou mantendo dessa forma para seguir o padrao 
+                     * Dessa maneira ele requer que algumas variaveis estejam "vivas" durante o projeto sendo que serao inuteis
+                     * usar o break previne isso, só colocar a condicao de parada
+                    */
+                        
+                    int userOption;
+                    String action;
+                    do {
+                        System.out.print("1-Nome\n2-Telefone\n3-Email\n4-Cancelar\n");
+    
+                        System.out.println("Pelo que voce deseja pesquisar? ");
+                        userOption = ler.nextInt();
+                        ler.nextLine();
+    
+                        action = "searchforall";
+
+
+                        switch (userOption) {
+                            case 1:
+                                action = "name";
+                                break;
+                            case 2: 
+                                action = "phone";
+                                break;
+                            case 3: 
+                                action = "email";
+                                break;
+                        }
+                        if (userOption >= 1 && userOption <= 3) {
+                            break;
+                        }
+
+                    } while (userOption != 4);
+
                     System.out.print("Digite o nome, numero ou email do contato: ");
                     nomeContato = ler.nextLine();
-                    System.out.println("\nContatos encontrados: ");
-                    System.out.println("----------------------------------------------------");
+                    result = agenda.lerContato(nomeContato, action);
+                    
 
-                    result = agenda.lerContato(nomeContato);
                     if(result.isEmpty()){
                         System.out.println("Nenhum contato encontrado!");
                     }else{
+                        System.out.println("\nContatos encontrados: ");
+                        System.out.println("----------------------------------------------------");
                         for(Contato c: result){
+                            
                             System.out.print(c.getId() + " ~ ");
                             System.out.print(c.getNome() + " ~ ");
                             System.out.print(c.getTelefone() + " ~ ");
@@ -86,7 +122,7 @@ public class main {
 //                        System.out.println("A pessoa Pedro não existe na lista.");
 //                    }
 
-                    result = agenda.lerContato(nomeContato);
+                    result = agenda.lerContato(nomeContato, "searchforall");
                     if(result.isEmpty()){
                         System.out.println("----------------------------------------------------");
                         System.out.println("Nenhum contato encontrado!");
@@ -123,13 +159,12 @@ public class main {
                     }
 
                     break;
-                    //TODO tem que ter uma opcao separada para salvar e outra para sair
                 case 5:
                     agenda.save();
-                    exit = true;
+                    System.out.println();
                     break;
             }
-        }while (!exit);
+        }while (op != 6);
 
 
 

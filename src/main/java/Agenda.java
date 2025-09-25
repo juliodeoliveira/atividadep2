@@ -53,15 +53,48 @@ public class Agenda {
 //
 //    }
 
-    public ArrayList<Contato> lerContato(String valor){
+    public ArrayList<Contato> lerContato(String valor, String field){
         ArrayList<Contato> contatos = new ArrayList<>();
 
-        for (Contato c : this.contatos) {
-            // TODo o usuario tem que informar pelo o que ele quer pesquisar
-            if (c.getNome().contains(valor) || c.getTelefone().contains(valor) || c.getEmail().contains(valor)) {
-                contatos.add(c);
-            }
+        String informationToSearch = "";
+
+        switch (field) {
+            case "name":
+                for (Contato c : this.contatos) {
+                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
+                    if (c.getNome().contains(valor)) {
+                        contatos.add(c);
+                    }
+                }
+
+                break;
+                
+            case "phone":
+                for (Contato c : this.contatos) {
+                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
+                    if (c.getTelefone().contains(valor)) {
+                        contatos.add(c);
+                    }
+                }
+
+            case "email":
+                for (Contato c : this.contatos) {
+                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
+                    if (c.getEmail().contains(valor)) {
+                        contatos.add(c);
+                    }
+                }
+        
+            default:
+                for (Contato c : this.contatos) {
+                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
+                    if (c.getNome().contains(valor) || c.getTelefone().contains(valor) || c.getEmail().contains(valor)) {
+                        contatos.add(c);
+                    }
+                }
+                break;
         }
+
 
         return contatos;
     }
