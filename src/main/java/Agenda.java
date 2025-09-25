@@ -81,6 +81,17 @@ public class Agenda {
         return this.contatos;
     }
 
+    @Override
+    public String toString() {
+        String converts = "";
+
+        for (Contato c : this.contatos) {
+            converts += c.getNome() + " ~ " + c.getTelefone() + " ~ " + c.getEmail() + "\n";
+        }
+
+        return "Contatos: " + converts;
+    }
+
     public void save() {
         String content = "";
         for (Contato c : this.contatos) {

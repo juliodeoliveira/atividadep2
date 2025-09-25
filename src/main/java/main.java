@@ -6,6 +6,7 @@ public class main {
     public static void main(String[] args) {
         Scanner ler = new Scanner(System.in);
         Agenda agenda = new Agenda();
+        System.out.println(agenda.toString());
 
         int op=0;
         String nomeContato;
