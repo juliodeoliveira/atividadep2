@@ -25,11 +25,34 @@ public class main {
                     System.out.print("Digite o nome do contato: ");
                     nomeContato = ler.nextLine();
 
-                    System.out.print("Digite o telefone do contato: ");
-                    telContato = ler.nextLine();
+         
+                    while (true) {
+                        System.out.print("Digite o telefone do contato: +55 ");
+                        telContato = ler.nextLine();
 
-                    System.out.print("Digite o email do contato: ");
-                    email = ler.nextLine();
+                        String validation = agenda.validatePhone(telContato);
+
+                        if (!validation.startsWith("ERRO:")) {
+                            telContato = validation;
+                            break;
+                        }
+
+                        System.out.println(validation);
+                    }
+
+
+                    while (true) {
+                        System.out.print("Digite o email do contato: ");
+                        email = ler.nextLine();
+                        
+                        String validation = agenda.validateEmail(email);
+
+                        if (!validation.startsWith("ERRO:")) {
+                            break;
+                        }
+
+                        System.out.println(validation); // inválido → mostra mensagem
+                    }
 
                     Contato contato = new Contato(nomeContato, telContato, email);
 
@@ -152,11 +175,14 @@ public class main {
                         System.out.println("----------------------------------------------------");
 
                         while (true) {
-                            //! nao ta cancelando a operacao
                             System.out.print("Digite o ID do contato que quer apagar (999 - cancela): ");
                             int user = ler.nextInt();
                             int editOp;
-                            
+
+                            if (user == 999) {
+                                break;
+                            }
+
                             do{
                                 System.out.println("Da ideia, oque você quer editar:");
                                 System.out.print("1-Nome\n2-Telefone\n3-Email\n4-Cancelar\nEsoclha a opção: ");
@@ -170,13 +196,18 @@ public class main {
                                     case 2:
                                         System.out.print("Digite o novo telefone do contato: ");
                                         agenda.editarContato(ler.nextLine(),"phone", user);
+                                        // TODO: validacao de numero aqui
+
                                         break;
                                     case 3:
                                         System.out.print("Digite o novo email do contato: ");
                                         agenda.editarContato(ler.nextLine(),"email", user);
+                                        // TODO: validacao de email aqui
+
                                         break;
                                 }
                             }while(editOp != 4);
+
                             if(editOp == 4){
                                 break;
                             }
@@ -220,13 +251,16 @@ public class main {
                         while (true) {
                             System.out.print("Digite o ID do contato que quer apagar (999 - cancela): ");
                             int user = ler.nextInt();
+
+                            if (user == 999) {
+                                break;
+                            }
+
                             System.out.println();
                             if (ids.contains(user)) {
                                 agenda.apagarContato(user);
                                 break;
-                            } else if (user == 999) {
-                                break;
-                            }
+                            } 
 
                             System.out.println("ID inválido!");
                         }

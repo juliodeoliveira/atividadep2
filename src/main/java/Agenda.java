@@ -1,9 +1,12 @@
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Agenda {
-    private int Id;
-    private String nome;
+    // private int Id;
+    // private String nome;
+
     private Arquivo arquivo;
     private ArrayList<Contato> contatos = new ArrayList<>();
 
@@ -37,19 +40,6 @@ public class Agenda {
         contact.setId(this.contatos.size());
         this.contatos.add(contact);
     }
-
-//    public int verificarUltimoId(){
-//        ArrayList<String> conteudo = this.arquivo.readFileArray();
-//
-//        if(conteudo.isEmpty()){
-//           return 0;
-//        }
-//        String UltimaLinha = conteudo.getLast();
-//        return Integer.parseInt(UltimaLinha.split(" | ")[0])+1;
-//       // String[] arrayContent = conteudo.split("\\|");
-//
-//
-//    }
 
     public ArrayList<Contato> lerContato(String valor, String field){
         ArrayList<Contato> contatos = new ArrayList<>();
@@ -107,7 +97,6 @@ public class Agenda {
         }
     }
 
-    // TODO: Deve ser toString
     public ArrayList<Contato> allContacts() {
         return this.contatos;
     }
@@ -138,7 +127,6 @@ public class Agenda {
         switch (field) {
             case "name":
                 for (Contato c : this.contatos) {
-                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
                     if (c.getId() == Id) {
                         c.setNome(valor);
                     }
@@ -146,7 +134,6 @@ public class Agenda {
 
             case "phone":
                 for (Contato c : this.contatos) {
-                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
                     if (c.getId() == Id) {
                         c.setTelefone(valor);
                     }
@@ -154,15 +141,51 @@ public class Agenda {
 
             case "email":
                 for (Contato c : this.contatos) {
-                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
                     if (c.getId() == Id) {
                         c.setEmail(valor);
                     }
-                }break;
-
-
-
+                }
+                break;
         }
 
     }
+
+    public String validatePhone(String telefone) {
+        String somenteNumeros = telefone.replaceAll("\\D", "");
+
+        String ddd = somenteNumeros.substring(0, 2);
+        String numero = somenteNumeros.substring(2);
+
+        if (somenteNumeros.length() < 11) {
+            return "ERRO: Verifique a quantidade de algarismos e o DDD.";
+        }
+        if (somenteNumeros.length() > 12 || !numero.startsWith("9")) {
+            return "ERRO: Verifique se o número está no padrão brasileiro.";
+        }
+
+        if (somenteNumeros.length() == 12 && somenteNumeros.startsWith("0")) {
+            somenteNumeros = somenteNumeros.substring(1);
+        }
+
+        return String.format(
+            "+55 (%s) %s %s-%s",
+            ddd,
+            numero.substring(0, 1),
+            numero.substring(1, 5),
+            numero.substring(5)
+        );
+    }
+
+    public String validateEmail(String email) {
+        // Regex básica para validar e-mails
+        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+        Pattern pattern = Pattern.compile(regex);
+
+        if (!pattern.matcher(email).matches()) {
+            return "ERRO: email inválido.";        
+        } 
+            
+        return email;
+    }
+
 }
