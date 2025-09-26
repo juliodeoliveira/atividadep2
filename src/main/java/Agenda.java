@@ -24,11 +24,9 @@ public class Agenda {
             String number = part[1].trim();
             String email = part[2].trim();
 
-            Contato contact = new Contato();
+            Contato contact = new Contato(name,number,email);
             contact.setId(idCount);
-            contact.setNome(name);
-            contact.setTelefone(number);
-            contact.setEmail(email);
+
 
             idCount += 1;
             this.contatos.add(contact);
@@ -85,7 +83,7 @@ public class Agenda {
                     }
                 }
         
-            default:
+            case "searchforall":
                 for (Contato c : this.contatos) {
                     // TODo o usuario tem que informar pelo o que ele quer pesquisar
                     if (c.getNome().contains(valor) || c.getTelefone().contains(valor) || c.getEmail().contains(valor)) {
@@ -119,7 +117,7 @@ public class Agenda {
         String converts = "";
 
         for (Contato c : this.contatos) {
-            converts += c.getNome() + " ~ " + c.getTelefone() + " ~ " + c.getEmail() + "\n";
+            converts += "Nome: "+ c.getNome() + " , " + "Telefone: " + c.getTelefone() + "," +"Email: "+ c.getEmail() + "\n";
         }
 
         return "Contatos: " + converts;
@@ -132,6 +130,39 @@ public class Agenda {
         }
 
         this.arquivo.escreverArquivo(content);
+
+    }
+
+    public void editarContato(String valor, String field, int Id){
+
+        switch (field) {
+            case "name":
+                for (Contato c : this.contatos) {
+                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
+                    if (c.getId() == Id) {
+                        c.setNome(valor);
+                    }
+                }break;
+
+            case "phone":
+                for (Contato c : this.contatos) {
+                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
+                    if (c.getId() == Id) {
+                        c.setTelefone(valor);
+                    }
+                }break;
+
+            case "email":
+                for (Contato c : this.contatos) {
+                    // TODo o usuario tem que informar pelo o que ele quer pesquisar
+                    if (c.getId() == Id) {
+                        c.setEmail(valor);
+                    }
+                }break;
+
+
+
+        }
 
     }
 }
