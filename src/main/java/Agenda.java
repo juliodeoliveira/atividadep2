@@ -1,17 +1,13 @@
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Agenda {
-    // private int Id;
-    // private String nome;
 
     private Arquivo arquivo;
     private ArrayList<Contato> contatos = new ArrayList<>();
 
     public Agenda() {
-        this.arquivo = new Arquivo("teste.txt");
+        this.arquivo = new Arquivo("contacts.txt");
         this.arquivo.criarArquivo();
 
         ArrayList<String> conteudo = this.arquivo.readFileArray();
@@ -43,8 +39,6 @@ public class Agenda {
 
     public ArrayList<Contato> lerContato(String valor, String field){
         ArrayList<Contato> contatos = new ArrayList<>();
-
-        String informationToSearch = "";
 
         switch (field) {
             case "name":
@@ -84,8 +78,6 @@ public class Agenda {
                 }
                 break;
         }
-
-
         return contatos;
     }
 
@@ -153,33 +145,43 @@ public class Agenda {
     }
 
     public String validatePhone(String telefone) {
+        if (!telefone.matches("[\\d\\s\\-()]+")) {
+            return "ERRO: Números de telefone não podem conter letras ou símbolos inválidos.";
+        }
+
         String somenteNumeros = telefone.replaceAll("\\D", "");
 
-        String ddd = somenteNumeros.substring(0, 2);
-        String numero = somenteNumeros.substring(2);
-
-        if (somenteNumeros.length() < 11) {
-            return "ERRO: Verifique a quantidade de algarismos e o DDD.";
-        }
-        if (somenteNumeros.length() > 12 || !numero.startsWith("9")) {
-            return "ERRO: Verifique se o número está no padrão brasileiro.";
+        if (somenteNumeros.length() < 8) {
+            return "ERRO: Número inválido. Mínimo de 8 dígitos.";
         }
 
-        if (somenteNumeros.length() == 12 && somenteNumeros.startsWith("0")) {
-            somenteNumeros = somenteNumeros.substring(1);
+        if (somenteNumeros.length() >= 10) {
+            String ddd = somenteNumeros.substring(0, 2);
+            String numero = somenteNumeros.substring(2);
+
+            if (somenteNumeros.length() == 12 && somenteNumeros.startsWith("0")) {
+                somenteNumeros = somenteNumeros.substring(1);
+                ddd = somenteNumeros.substring(0, 2);
+                numero = somenteNumeros.substring(2);
+            }
+
+            if (numero.startsWith("9")) {
+                return String.format(
+                    "+55 (%s) %s %s-%s",
+                    ddd,
+                    numero.substring(0, 1),
+                    numero.substring(1, 5),
+                    numero.substring(5)
+                );
+            }
         }
 
-        return String.format(
-            "+55 (%s) %s %s-%s",
-            ddd,
-            numero.substring(0, 1),
-            numero.substring(1, 5),
-            numero.substring(5)
-        );
+        int tamanho = somenteNumeros.length();
+        return "+55 " + somenteNumeros.substring(0, tamanho - 4) 
+            + "-" + somenteNumeros.substring(tamanho - 4);
     }
 
     public String validateEmail(String email) {
-        // Regex básica para validar e-mails
         String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);
 

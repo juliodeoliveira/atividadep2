@@ -16,21 +16,25 @@ public class main {
 
         do {
             System.out.println("----------------------------------------------------");
+
+            System.out.println("====================================================");
+            System.out.println("                   MENU PRINCIPAL");
+            System.out.println("====================================================");
+
             System.out.print("1-Criar contatos\n2-Ler todos contatos\n3-Buscar contato\n4-Editar contato\n5-Apagar contato\n6-Salvar\n7-Sair\nEscolha uma opção: ");
 
             op = ler.nextInt();
             ler.nextLine();
             switch (op) {
                 case 1:
-
                     System.out.print("Digite o nome do contato: ");
                     nomeContato = ler.nextLine();
 
-
                     while (true) {
                         System.out.print("Digite o telefone do contato: +55 ");
-                        telContato = ler.nextLine();
 
+                        telContato = ler.nextLine();
+                        
                         String validation = agenda.validatePhone(telContato);
 
                         if (!validation.startsWith("ERRO:")) {
@@ -58,6 +62,7 @@ public class main {
                     Contato contato = new Contato(nomeContato, telContato, email);
 
                     agenda.adicionarContato(contato);
+                    System.out.println("Contato criado com sucesso!");
 
                     break;
                 case 2:
@@ -79,11 +84,6 @@ public class main {
                     break;
                 case 3:
 
-                    /* * Sugestao para mudar os loops de menu, exclusivamente, estou mantendo dessa forma para seguir o padrao
-                     * Dessa maneira ele requer que algumas variaveis estejam "vivas" durante o projeto sendo que serao inuteis
-                     * usar o break previne isso, só colocar a condicao de parada
-                     */
-
                     int userOption;
                     String action;
                     do {
@@ -103,15 +103,23 @@ public class main {
                                 break;
                             case 2:
                                 action = "phone";
-                                System.out.print("Digite o numero do contato: ");
-                                nomeContato = ler.nextLine();
-                                result = agenda.lerContato(nomeContato, action);
+                                System.out.print("Digite o numero do contato: +55 ");
+                                String numeroContato = ler.nextLine();
+                                
+                                String validatedNumber = agenda.validatePhone(numeroContato);
+
+                                if (validatedNumber.startsWith("ERRO:")) {
+                                    validatedNumber = numeroContato;
+                                }
+
+                                result = agenda.lerContato(validatedNumber, action);
                                 break;
                             case 3:
                                 action = "email";
                                 System.out.print("Digite o email do contato: ");
-                                nomeContato = ler.nextLine();
-                                result = agenda.lerContato(nomeContato, action);
+                                String emailContato = ler.nextLine();
+
+                                result = agenda.lerContato(emailContato, action);
                                 break;
 
                         }
@@ -141,8 +149,6 @@ public class main {
                     System.out.print("Digite o nome ou numero do contato: ");
                     nomeContato = ler.nextLine();
 
-                    // TODO: validar se o id que o usuario digitou aqui pra poder editar corretamente
-
                     result = agenda.lerContato(nomeContato, "searchforall");
                     if (result.isEmpty()) {
                         System.out.println("----------------------------------------------------");
@@ -165,26 +171,35 @@ public class main {
                         while (true) {
                             System.out.print("Digite o ID do contato que quer editar: ");
                             int user = ler.nextInt();
+
                             int editOp;
                             if (!(ids.contains(user))) {
                                 System.out.println("ID digitado não foi encontrado!");
                                 continue;
                             }
 
+                            Contato contatoSelecionado = null;
+                            for (Contato c : result) {
+                                if (c.getId() == user) {
+                                    contatoSelecionado = c;
+                                    break;
+                                }
+                            }
 
                             do {
-                                System.out.println("Da ideia, oque você quer editar:");
-                                System.out.print("1-Nome\n2-Telefone\n3-Email\n4-Cancelar\nEscolha a opção: ");
+                                System.out.printf("O que você quer editar do contato \"%s\":\n", contatoSelecionado.getNome());                                System.out.print("1-Nome\n2-Telefone\n3-Email\n4-Cancelar\nEscolha a opção: ");
                                 editOp = ler.nextInt();
                                 ler.nextLine();
                                 switch (editOp) {
                                     case 1:
                                         System.out.print("Digite o novo nome do contato: ");
                                         agenda.editarContato(ler.nextLine(), "name", user);
+
+                                        System.out.println("----------------------------------------------------");
+                                        System.out.println("Contato editado com sucesso!");
                                         break;
                                     case 2:
 
-                                        // TODO: validacao de numero aqui
                                         while (true) {
                                             System.out.print("Digite o telefone do contato: +55 ");
                                             telContato = ler.nextLine();
@@ -198,10 +213,11 @@ public class main {
 
                                             System.out.println(validation);
                                         }
+                                        System.out.println("----------------------------------------------------");
+                                        System.out.println("Contato editado com sucesso!");
 
                                         break;
                                     case 3:
-                                        // TODO: validacao de email aqui
                                         while (true) {
                                             System.out.print("Digite o email do contato: ");
                                             email = ler.nextLine();
@@ -213,8 +229,11 @@ public class main {
                                                 break;
                                             }
 
-                                            System.out.println(validation); // inválido → mostra mensagem
+                                            System.out.println(validation);
                                         }
+
+                                        System.out.println("----------------------------------------------------");
+                                        System.out.println("Contato editado com sucesso!");
 
                                         break;
                                 }
@@ -227,12 +246,11 @@ public class main {
                         }
 
                     }
-                    System.out.println("----------------------------------------------------");
-                    System.out.println("Contato editado com sucesso!");
+                   
                     break;
 
                 case 5:
-                    System.out.print("Digite o nome ou numero do contato: ");
+                    System.out.print("Digite o nome, número ou email do contato: ");
                     nomeContato = ler.nextLine();
                     result = agenda.lerContato(nomeContato, "searchforall");
 
