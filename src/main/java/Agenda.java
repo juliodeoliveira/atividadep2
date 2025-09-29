@@ -64,6 +64,7 @@ public class Agenda {
                         contatos.add(c);
                     }
                 }
+                break;
 
             case "email":
                 for (Contato c : this.contatos) {
@@ -72,6 +73,7 @@ public class Agenda {
                         contatos.add(c);
                     }
                 }
+                break;
         
             case "searchforall":
                 for (Contato c : this.contatos) {
@@ -106,7 +108,7 @@ public class Agenda {
         String converts = "";
 
         for (Contato c : this.contatos) {
-            converts += "Nome: "+ c.getNome() + " , " + "Telefone: " + c.getTelefone() + "," +"Email: "+ c.getEmail() + "\n";
+            converts += "Nome: "+ c.getNome() + " , " + "Telefone: " + c.getTelefone() + ", " +"Email: "+ c.getEmail() + "\n";
         }
 
         return "Contatos: " + converts;
